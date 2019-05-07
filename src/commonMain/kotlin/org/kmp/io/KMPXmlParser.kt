@@ -158,8 +158,8 @@ class KMPXmlParser : KMPPullParser {
 
                     //System.out.println (prefixMap);
 
-                    System.arraycopy(attributes, i + 4, attributes, i, (--attributeCount shl 2) - i)
-
+                    //System.arraycopy(attributes, i + 4, attributes, i, (--attributeCount shl 2) - i)
+                    attributes.copyInto(attributes, i, i + 4, i + 4 + ((--attributeCount shl 2) - i))
                     i -= 4
                 }
                 i += 4
@@ -235,7 +235,7 @@ class KMPXmlParser : KMPPullParser {
         if (arr.size >= required)
             return arr
         val bigger = arrayOfNulls<String>(required + 16)
-        System.arraycopy(arr, 0, bigger, 0, arr.size)
+        arr.copyInto(bigger, 0, 0, arr.size)
         return bigger
     }
 
@@ -250,9 +250,7 @@ class KMPXmlParser : KMPPullParser {
 
     private fun exception(desc: String) {
         throw KMPPullParserException(
-            if (desc.length < 100) desc else desc.substring(0, 100) + "\n",
-            this, null
-        )
+            if (desc.length < 100) desc else desc.substring(0, 100) + "\n", this, null)
     }
 
     /**
@@ -584,7 +582,8 @@ class KMPXmlParser : KMPPullParser {
 
         if (txtPos + 1 >= txtBuf.size) { // +1 to have enough space for 2 surrogates, if needed
             val bigger = CharArray(txtPos * 4 / 3 + 4)
-            System.arraycopy(txtBuf, 0, bigger, 0, txtPos)
+            //System.arraycopy(txtBuf, 0, bigger, 0, txtPos)
+            txtBuf.copyInto(bigger, 0, 0, txtPos)
             txtBuf = bigger
         }
 
@@ -693,7 +692,8 @@ class KMPXmlParser : KMPPullParser {
 
         if (depth >= nspCounts.size) {
             val bigger = IntArray(depth + 4)
-            System.arraycopy(nspCounts, 0, bigger, 0, nspCounts.size)
+            //System.arraycopy(nspCounts, 0, bigger, 0, nspCounts.size)
+            nspCounts.copyInto(bigger, 0, 0, nspCounts.size)
             nspCounts = bigger
         }
 
