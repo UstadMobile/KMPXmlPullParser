@@ -329,7 +329,7 @@ class KMPXmlParser : KMPPullParser {
                 END_DOCUMENT -> return
 
                 TEXT -> {
-                    pushText('<', !token)
+                    pushText('<'.toInt(), !token)
                     if (depth == 0) {
                         if (isWhitespace)
                             type = IGNORABLE_WHITESPACE
@@ -767,9 +767,9 @@ class KMPXmlParser : KMPPullParser {
 
         if (code[0] == '#') {
             val c = if (code[1] == 'x')
-                Integer.parseInt(code.substring(2), 16)
+                code.substring(2).toInt(16)
             else
-                Integer.parseInt(code.substring(1))
+                code.substring(1).toInt()
             push(c)
             return
         }
