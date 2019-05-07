@@ -8,7 +8,7 @@ package org.kmp.io
  *
  * @author Aleksander Slominski [http://www.extreme.indiana.edu/~aslom/]
  */
-class XmlPullParserException : Exception {
+class KMPPullParserException : Exception {
     var detail: Throwable? = null
     var lineNumber = -1
         protected set
@@ -17,7 +17,7 @@ class XmlPullParserException : Exception {
 
     constructor() {}
 
-    constructor(s: String) : super(s) {}
+    constructor(s: String) : super(s)
 
     constructor(s: String, thrwble: Throwable) : super(s) {
         this.detail = thrwble
@@ -34,12 +34,10 @@ class XmlPullParserException : Exception {
         this.columnNumber = parser.getColumnNumber()
     }
 
-    override fun getMessage(): String {
-        return if (detail == null)
+    override val message: String?
+        get() = if (detail == null)
             super.message
         else
-            super.message + "; nested exception is: \n\t"
-                    + detail!!.message
-    }
+            super.message + "; nested exception is: \n\t" + detail!!.message
 
 }
