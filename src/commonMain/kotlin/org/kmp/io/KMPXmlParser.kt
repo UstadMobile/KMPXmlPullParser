@@ -106,7 +106,7 @@ class KMPXmlParser : KMPPullParser {
     private var token: Boolean = false
 
     constructor() {
-        srcBuf = CharArray(if (Runtime.getRuntime().freeMemory() >= 1048576) 8192 else 128)
+        srcBuf = CharArray(8192)
     }
 
     private fun isProp(n1: String, prop: Boolean, n2: String): Boolean {
@@ -250,7 +250,7 @@ class KMPXmlParser : KMPPullParser {
 
     private fun exception(desc: String) {
         throw KMPPullParserException(
-            if (desc.length < 100) desc else desc.substring(0, 100) + "\n", this, null)
+            if (desc.length < 100) desc else desc.substring(0, 100) + "\n", this)
     }
 
     /**
