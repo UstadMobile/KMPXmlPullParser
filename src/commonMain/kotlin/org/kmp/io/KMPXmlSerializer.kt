@@ -2,9 +2,6 @@ package org.kmp.io
 
 import kotlinx.io.OutputStream
 import kotlinx.io.Writer
-import java.io.IOException
-import java.io.OutputStream
-import java.io.Writer
 
 /**
  * Define an interface to serialization of XML Infoset.
