@@ -3,6 +3,7 @@
 
 package org.kmp.io
 
+import kotlinx.io.Reader
 import org.kmp.io.XmlPullParserException
 
 /**
