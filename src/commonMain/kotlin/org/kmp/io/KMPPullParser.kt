@@ -1,12 +1,9 @@
 /* -*-             c-basic-offset: 4; indent-tabs-mode: nil; -*-  //------100-columns-wide------>|*/
 // see LICENSE.txt in distribution for copyright and license information
 
-package org.xmlpull.v1
+package org.kmp.io
 
 import org.kmp.io.XmlPullParserException
-
-import java.io.IOException
-import java.io.Reader
 
 /**
  * XML Pull Parser is an interface that defines parsing functionlity provided
@@ -51,7 +48,7 @@ import java.io.Reader
  * import java.io.IOException;
  * import java.io.StringReader;
  *
- * import org.xmlpull.v1.XmlPullParser;
+ * import org.kmp.io.XmlPullParser;
  * import org.xmlpull.v1.XmlPullParserException;
  * import org.xmlpull.v1.XmlPullParserFactory;
  *
@@ -149,7 +146,7 @@ interface XmlPullParser {
      * &lt;/pre&gt;
     </pre> *
      */
-    val depth: Int
+    fun getDepth(): Int
 
     /**
      * Short text describing parser position, including a
@@ -158,18 +155,18 @@ interface XmlPullParser {
      * This method is especially useful to give more meaningful error messages.
      */
 
-    val positionDescription: String
+    fun getPositionDescription(): String
 
 
     /**
      * Current line number: numebering starts from 1.
      */
-    val lineNumber: Int
+    fun getLineNumber(): Int
 
     /**
      * Current column: numbering starts from 0 (returned when parser is in START_DOCUMENT state!)
      */
-    val columnNumber: Int
+    fun getColumnNumber(): Int
 
 
     // --------------------------------------------------------------------------
@@ -194,13 +191,13 @@ interface XmlPullParser {
      * exception will be thrown!
      */
 
-    val isWhitespace: Boolean
+    fun isWhitespace(): Boolean
 
     /**
      * Read text content of the current event as String.
      */
 
-    val text: String
+    fun getText(): String
 
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
@@ -210,7 +207,8 @@ interface XmlPullParser {
      * If namespaces are NOT enabled, an empty String ("") always is returned.
      * The current event must be START_TAG or END_TAG, otherwise, null is returned.
      */
-    val namespace: String
+    fun getNamespace(): String
+
 
     /**
      * Returns the (local) name of the current element
@@ -223,7 +221,7 @@ interface XmlPullParser {
      * add prefix and colon to localName if prefix is not null.
      *
      */
-    val name: String
+    fun getName(): String
 
     /**
      * Returns the prefix of the current element
@@ -231,7 +229,7 @@ interface XmlPullParser {
      * If namespaces are not enabled it always returns null.
      * If the current event is not  START_TAG or END_TAG the null value is returned.
      */
-    val prefix: String
+    fun getPrefix(): String
 
 
     /**
@@ -240,7 +238,7 @@ interface XmlPullParser {
      *
      * **NOTE:** if parser is not on START_TAG then the exception will be thrown.
      */
-    val isEmptyElementTag: Boolean
+    fun isEmptyElementTag(): Boolean
 
     // --------------------------------------------------------------------------
     // START_TAG Attributes retrieval methods
@@ -257,7 +255,7 @@ interface XmlPullParser {
      *
      * @see .getAttributeValue
      */
-    val attributeCount: Int
+    fun getAttributeCount(): Int
 
 
     // --------------------------------------------------------------------------
@@ -269,7 +267,7 @@ interface XmlPullParser {
      * @see .next
      * @see .nextToken
      */
-    val eventType: Int
+    fun getEventType(): Int
 
     /**
      * Use this call to change the general behaviour of the parser,
@@ -286,10 +284,7 @@ interface XmlPullParser {
      * @exception IllegalArgumentException if feature string is null
      */
     @Throws(XmlPullParserException::class)
-    fun setFeature(
-        name: String,
-        state: Boolean
-    )
+    fun setFeature(name: String, state: Boolean)
 
     /**
      * Return the current value of the feature with given name.
@@ -309,10 +304,7 @@ interface XmlPullParser {
      * The property name is any fully-qualified URI.
      */
     @Throws(XmlPullParserException::class)
-    fun setProperty(
-        name: String,
-        value: Any
-    )
+    fun setProperty(name: String, value: Any)
 
     /**
      * Look up the value of a property.
@@ -368,10 +360,7 @@ interface XmlPullParser {
      * @see .FEATURE_VALIDATION
      */
     @Throws(XmlPullParserException::class)
-    fun defineEntityReplacementText(
-        entityName: String,
-        replacementText: String
-    )
+    fun defineEntityReplacementText(entityName: String, replacementText: String)
 
     /**
      * Return position in stack of first namespace slot for element at passed depth.
@@ -529,10 +518,7 @@ interface XmlPullParser {
      * @param name If namespaces enabled local name of attribute otherwise just attribute name
      * @return value of attribute
      */
-    fun getAttributeValue(
-        namespace: String,
-        name: String
-    ): String
+    fun getAttributeValue(namespace: String, name: String): String
 
 
     /**
