@@ -283,7 +283,6 @@ interface XmlPullParser {
      * @exception XmlPullParserException if feature is not supported or can not be set
      * @exception IllegalArgumentException if feature string is null
      */
-    @Throws(XmlPullParserException::class)
     fun setFeature(name: String, state: Boolean)
 
     /**
@@ -303,7 +302,6 @@ interface XmlPullParser {
      *
      * The property name is any fully-qualified URI.
      */
-    @Throws(XmlPullParserException::class)
     fun setProperty(name: String, value: Any)
 
     /**
@@ -324,7 +322,6 @@ interface XmlPullParser {
      * Using null parameter will stop parsing and reset parser state
      * allowing parser to free internal resources (such as parsing buffers).
      */
-    @Throws(XmlPullParserException::class)
     fun setInput(`in`: Reader)
 
     /**
@@ -359,7 +356,6 @@ interface XmlPullParser {
      *
      * @see .FEATURE_VALIDATION
      */
-    @Throws(XmlPullParserException::class)
     fun defineEntityReplacementText(entityName: String, replacementText: String)
 
     /**
@@ -376,20 +372,17 @@ interface XmlPullParser {
      * @see .getNamespace
      * @see .getNamespace
      */
-    @Throws(XmlPullParserException::class)
     fun getNamespaceCount(depth: Int): Int
 
     /**
      * Return namespace prefixes for position pos in namespace stack
      */
-    @Throws(XmlPullParserException::class)
     fun getNamespacePrefix(pos: Int): String
 
     /**
      * Return namespace URIs for position pos in namespace stack
      * If pos is out of range it throw exception.
      */
-    @Throws(XmlPullParserException::class)
     fun getNamespaceUri(pos: Int): String
 
     /**
@@ -425,7 +418,6 @@ interface XmlPullParser {
      */
 
 
-    @Throws(XmlPullParserException::class)
     fun getNamespace(prefix: String): String
 
 
@@ -545,7 +537,6 @@ interface XmlPullParser {
      * @see .END_DOCUMENT
      */
 
-    @Throws(XmlPullParserException::class, IOException::class)
     operator fun next(): Int
 
 
@@ -615,7 +606,6 @@ interface XmlPullParser {
      * @see .IGNORABLE_WHITESPACE
      */
 
-    @Throws(XmlPullParserException::class, IOException::class)
     fun nextToken(): Int
 
     //-----------------------------------------------------------------------------
@@ -643,7 +633,6 @@ interface XmlPullParser {
      * throw new XmlPullParserException ( "expected "+ TYPES[ type ]+getPositionDesctiption());
     </pre> *
      */
-    @Throws(XmlPullParserException::class, IOException::class)
     fun require(type: Int, namespace: String, name: String)
 
 
@@ -663,7 +652,6 @@ interface XmlPullParser {
      * return result;
     </pre> *
      */
-    @Throws(XmlPullParserException::class, IOException::class)
     fun readText(): String
 
     companion object {
