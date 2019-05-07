@@ -22,6 +22,23 @@
 
 package org.kmp.io
 
+import kotlinx.io.InputStream
+import kotlinx.io.Reader
+import org.kmp.InputStreamReader
+import org.kmp.io.KMPPullParser.Companion.CDSECT
+import org.kmp.io.KMPPullParser.Companion.COMMENT
+import org.kmp.io.KMPPullParser.Companion.DOCDECL
+import org.kmp.io.KMPPullParser.Companion.END_DOCUMENT
+import org.kmp.io.KMPPullParser.Companion.END_TAG
+import org.kmp.io.KMPPullParser.Companion.ENTITY_REF
+import org.kmp.io.KMPPullParser.Companion.IGNORABLE_WHITESPACE
+import org.kmp.io.KMPPullParser.Companion.NO_NAMESPACE
+import org.kmp.io.KMPPullParser.Companion.PROCESSING_INSTRUCTION
+import org.kmp.io.KMPPullParser.Companion.START_DOCUMENT
+import org.kmp.io.KMPPullParser.Companion.START_TAG
+import org.kmp.io.KMPPullParser.Companion.TEXT
+import org.kmp.io.KMPPullParser.Companion.TYPES
+
 
 /** A simple, pull based XML parser. This classe replaces the kXML 1
  * XmlParser class and the corresponding event classes.  */
@@ -238,7 +255,7 @@ class KMPXmlParser : KMPPullParser {
     }
 
     private fun exception(desc: String) {
-        throw XmlPullParserException(
+        throw KMPPullParserException(
             if (desc.length < 100) desc else desc.substring(0, 100) + "\n",
             this, null
         )
@@ -1081,17 +1098,13 @@ class KMPXmlParser : KMPPullParser {
             inputEncoding = _enc
             srcCount = sc
         } catch (e: Exception) {
-            throw XmlPullParserException(
-                "Invalid stream or encoding: $e",
-                this,
-                e
-            )
+            throw KMPPullParserException("Invalid stream or encoding: $e", this, e)
         }
 
     }
 
     override fun getFeature(feature: String): Boolean {
-        return if (XmlPullParser.FEATURE_PROCESS_NAMESPACES.equals(feature))
+        return if (KMPPullParser.FEATURE_PROCESS_NAMESPACES.equals(feature))
             processNsp
         else if (isProp(feature, false, "relaxed"))
             relaxed
@@ -1152,7 +1165,7 @@ class KMPXmlParser : KMPPullParser {
 
     override fun getPositionDescription(): String {
 
-        val buf = StringBuffer(if (type < TYPES.length) TYPES[type] else "unknown")
+        val buf = StringBuffer(if (type < TYPES.size) TYPES[type] else "unknown")
         buf.append(' ')
 
         if (type == START_TAG || type == END_TAG) {
@@ -1396,7 +1409,7 @@ class KMPXmlParser : KMPPullParser {
 
 
     override fun setFeature(feature: String, value: Boolean) {
-        if (XmlPullParser.FEATURE_PROCESS_NAMESPACES.equals(feature))
+        if (KMPPullParser.FEATURE_PROCESS_NAMESPACES.equals(feature))
             processNsp = value
         else if (isProp(feature, false, "relaxed"))
             relaxed = value
@@ -1409,7 +1422,7 @@ class KMPXmlParser : KMPPullParser {
         if (isProp(property, true, "location"))
             location = value
         else
-            throw XmlPullParserException("unsupported property: $property")
+            throw KMPPullParserException("unsupported property: $property")
     }
 
     /**
