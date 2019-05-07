@@ -773,7 +773,7 @@ interface KMPPullParser {
          *
          * @see .getText
          */
-        val CDSECT: Byte = 5
+        val CDSECT = 5
 
         /**
          * TOKEN: Entity reference was just read
@@ -785,7 +785,7 @@ interface KMPPullParser {
          *
          * @see .getText
          */
-        val ENTITY_REF: Byte = 6
+        val ENTITY_REF = 6
 
         /**
          * TOKEN: Ignorable whitespace was just read
@@ -805,7 +805,7 @@ interface KMPPullParser {
          *
          * @see .getText
          */
-        val IGNORABLE_WHITESPACE: Byte = 7
+        val IGNORABLE_WHITESPACE = 7
 
         /**
          * TOKEN: XML processing instruction declaration was just read
@@ -816,7 +816,7 @@ interface KMPPullParser {
          *
          * @see .getText
          */
-        val PROCESSING_INSTRUCTION: Byte = 8
+        val PROCESSING_INSTRUCTION = 8
 
         /**
          * TOKEN: XML comment was just read and getText() will return value inside comment
