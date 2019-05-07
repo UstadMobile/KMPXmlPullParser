@@ -207,7 +207,7 @@ interface KMPPullParser {
      * If namespaces are NOT enabled, an empty String ("") always is returned.
      * The current event must be START_TAG or END_TAG, otherwise, null is returned.
      */
-    fun getNamespace(): String
+    fun getNamespace(): String?
 
 
     /**
@@ -221,7 +221,7 @@ interface KMPPullParser {
      * add prefix and colon to localName if prefix is not null.
      *
      */
-    fun getName(): String
+    fun getName(): String?
 
     /**
      * Returns the prefix of the current element
@@ -229,7 +229,7 @@ interface KMPPullParser {
      * If namespaces are not enabled it always returns null.
      * If the current event is not  START_TAG or END_TAG the null value is returned.
      */
-    fun getPrefix(): String
+    fun getPrefix(): String?
 
 
     /**
@@ -314,7 +314,7 @@ interface KMPPullParser {
      * @param name The name of property to be retrieved.
      * @return The value of named property.
     </string> */
-    fun getProperty(name: String): Any
+    fun getProperty(name: String): Any?
 
 
     /**
@@ -377,13 +377,13 @@ interface KMPPullParser {
     /**
      * Return namespace prefixes for position pos in namespace stack
      */
-    fun getNamespacePrefix(pos: Int): String
+    fun getNamespacePrefix(pos: Int): String?
 
     /**
      * Return namespace URIs for position pos in namespace stack
      * If pos is out of range it throw exception.
      */
-    fun getNamespaceUri(pos: Int): String
+    fun getNamespaceUri(pos: Int): String?
 
     /**
      * Return uri for the given prefix.
@@ -418,7 +418,7 @@ interface KMPPullParser {
      */
 
 
-    fun getNamespace(prefix: String): String
+    fun getNamespace(prefix: String): String?
 
 
     /**
@@ -466,7 +466,7 @@ interface KMPPullParser {
      * @param zero based index of attribute
      * @return attribute namespace or "" if namesapces processing is not enabled.
      */
-    fun getAttributeNamespace(index: Int): String
+    fun getAttributeNamespace(index: Int): String?
 
     /**
      * Returns the local name of the specified attribute
@@ -477,7 +477,7 @@ interface KMPPullParser {
      * @param zero based index of attribute
      * @return attribute names
      */
-    fun getAttributeName(index: Int): String
+    fun getAttributeName(index: Int): String?
 
     /**
      * Returns the prefix of the specified attribute
@@ -489,7 +489,7 @@ interface KMPPullParser {
      * @param zero based index of attribute
      * @return attribute prefix or null if namesapces processing is not enabled.
      */
-    fun getAttributePrefix(index: Int): String
+    fun getAttributePrefix(index: Int): String?
 
     /**
      * Returns the given attributes value
@@ -499,7 +499,7 @@ interface KMPPullParser {
      * @param zero based index of attribute
      * @return value of attribute
      */
-    fun getAttributeValue(index: Int): String
+    fun getAttributeValue(index: Int): String?
 
     /**
      * Returns the attributes value identified by namespace URI and namespace localName.
@@ -510,7 +510,7 @@ interface KMPPullParser {
      * @param name If namespaces enabled local name of attribute otherwise just attribute name
      * @return value of attribute
      */
-    fun getAttributeValue(namespace: String, name: String): String
+    fun getAttributeValue(namespace: String?, name: String): String?
 
 
     /**
@@ -633,7 +633,7 @@ interface KMPPullParser {
      * throw new XmlPullParserException ( "expected "+ TYPES[ type ]+getPositionDesctiption());
     </pre> *
      */
-    fun require(type: Int, namespace: String, name: String)
+    fun require(type: Int, namespace: String?, name: String?)
 
 
     /**

@@ -54,7 +54,7 @@ class KMPXmlParser : KMPPullParser {
 
     private var processNsp: Boolean = false
     private var relaxed: Boolean = false
-    private var entityMap: Hashtable<*, *>? = null
+    private lateinit var entityMap: MutableMap<Any, Any>
     private var depth: Int = 0
     private var elementStack = arrayOfNulls<String>(16)
     private var nspStack = arrayOfNulls<String>(8)
@@ -231,7 +231,7 @@ class KMPXmlParser : KMPPullParser {
         return any
     }
 
-    private fun ensureCapacity(arr: Array<String>, required: Int): Array<String> {
+    private fun ensureCapacity(arr: Array<String?>, required: Int): Array<String?> {
         if (arr.size >= required)
             return arr
         val bigger = arrayOfNulls<String>(required + 16)
@@ -963,12 +963,12 @@ class KMPXmlParser : KMPPullParser {
         peekCount = 0
         depth = 0
 
-        entityMap = Hashtable()
-        entityMap!!.put("amp", "&")
-        entityMap!!.put("apos", "'")
-        entityMap!!.put("gt", ">")
-        entityMap!!.put("lt", "<")
-        entityMap!!.put("quot", "\"")
+        entityMap = mutableMapOf()
+        entityMap.put("amp", "&")
+        entityMap.put("apos", "'")
+        entityMap.put("gt", ">")
+        entityMap.put("lt", "<")
+        entityMap.put("quot", "\"")
     }
 
     fun setInput(`is`: InputStream?, _enc: String) {
@@ -1279,13 +1279,13 @@ class KMPXmlParser : KMPPullParser {
         return false
     }
 
-    override fun getAttributeNamespace(index: Int): String {
+    override fun getAttributeNamespace(index: Int): String? {
         if (index >= attributeCount)
             throw IndexOutOfBoundsException()
         return attributes[index shl 2]
     }
 
-    override fun getAttributeName(index: Int): String {
+    override fun getAttributeName(index: Int): String? {
         if (index >= attributeCount)
             throw IndexOutOfBoundsException()
         return attributes[(index shl 2) + 2]
@@ -1381,7 +1381,7 @@ class KMPXmlParser : KMPPullParser {
     }
 
 
-    fun nextText(): String {
+    fun nextText(): String? {
         if (type != START_TAG)
             exception("precondition: START_TAG")
 
