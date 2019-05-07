@@ -443,7 +443,7 @@ interface KMPPullParser {
      * @return char buffer that contains text of current event
      * or null if the current event has no text associated.
      */
-    fun getTextCharacters(holderForStartAndLength: IntArray): CharArray
+    fun getTextCharacters(holderForStartAndLength: IntArray): CharArray?
 
     /**
      * Returns the namespace URI of the specified attribute

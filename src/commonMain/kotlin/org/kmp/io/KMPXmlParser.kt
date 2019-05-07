@@ -1234,7 +1234,11 @@ class KMPXmlParser : KMPPullParser {
             if (type == ENTITY_REF) {
                 poslen[0] = 0
                 poslen[1] = name!!.length
-                return name!!.toCharArray()
+                val char = CharArray(name?.length ?: 0)
+                for ((index, _) in char.withIndex()) {
+                    char[index] = name!![index]
+                }
+                return char
             }
             poslen[0] = 0
             poslen[1] = txtPos
