@@ -21,7 +21,7 @@
 
 package org.kmp.io
 
-class KMPSerializerParser : KMPXmlSerializer {
+class KMPSerializerParser : KMPSerializerParser {
 
     //    static final String UNDEFINED = ":";
 
@@ -46,7 +46,6 @@ class KMPSerializerParser : KMPXmlSerializer {
     val name: String?
         get() = if (getDepth() == 0) null else elementStack[getDepth() * 3 - 1]
 
-    @Throws(IOException::class)
     private fun check(close: Boolean) {
         if (!pending)
             return
@@ -86,7 +85,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         writer!!.write(if (close) " />" else ">")
     }
 
-    @Throws(IOException::class)
+
     private fun writeEscaped(s: String, quot: Int) {
 
         var i = 0
@@ -156,14 +155,12 @@ class KMPSerializerParser : KMPXmlSerializer {
     			writer.write(' ');
     	}*/
 
-    @Throws(IOException::class)
     fun docdecl(dd: String) {
         writer!!.write("<!DOCTYPE")
         writer!!.write(dd)
         writer!!.write(">")
     }
 
-    @Throws(IOException::class)
     fun endDocument() {
         while (depth > 0) {
             endTag(
@@ -174,7 +171,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         flush()
     }
 
-    @Throws(IOException::class)
+
     fun entityRef(name: String) {
         check(false)
         writer!!.write('&')
@@ -199,7 +196,6 @@ class KMPSerializerParser : KMPXmlSerializer {
 
     }
 
-    @Throws(IOException::class)
     private fun getPrefix(
         namespace: String,
         includeDefault: Boolean,
@@ -256,7 +252,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         throw RuntimeException("Unsupported property")
     }
 
-    @Throws(IOException::class)
+
     fun ignorableWhitespace(s: String) {
         text(s)
     }
@@ -274,7 +270,6 @@ class KMPSerializerParser : KMPXmlSerializer {
         )
     }
 
-    @Throws(IOException::class)
     fun setPrefix(prefix: String?, namespace: String?) {
         var prefix = prefix
         var namespace = namespace
@@ -325,7 +320,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         unicode = false
     }
 
-    @Throws(IOException::class)
+
     fun setOutput(os: OutputStream?, encoding: String?) {
         if (os == null)
             throw IllegalArgumentException()
@@ -340,7 +335,7 @@ class KMPSerializerParser : KMPXmlSerializer {
             unicode = true
     }
 
-    @Throws(IOException::class)
+
     fun startDocument(
         encoding: String?,
         standalone: Boolean?
@@ -369,7 +364,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         writer!!.write("?>")
     }
 
-    @Throws(IOException::class)
+
     fun startTag(namespace: String?, name: String): XmlSerializer {
         check(false)
 
@@ -420,12 +415,8 @@ class KMPSerializerParser : KMPXmlSerializer {
         return this
     }
 
-    @Throws(IOException::class)
-    fun attribute(
-        namespace: String?,
-        name: String,
-        value: String
-    ): XmlSerializer {
+
+    fun attribute(namespace: String?, name: String, value: String): XmlSerializer {
         var namespace = namespace
         if (!pending)
             throw IllegalStateException("illegal position for attribute")
@@ -474,7 +465,6 @@ class KMPSerializerParser : KMPXmlSerializer {
         return this
     }
 
-    @Throws(IOException::class)
     fun flush() {
         check(false)
         writer!!.flush()
@@ -486,7 +476,7 @@ class KMPSerializerParser : KMPXmlSerializer {
     		writer.close();
     	}
     */
-    @Throws(IOException::class)
+
     fun endTag(namespace: String?, name: String): XmlSerializer {
 
         if (!pending)
@@ -528,7 +518,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         return if (pending) depth + 1 else depth
     }
 
-    @Throws(IOException::class)
+
     fun text(text: String): XmlSerializer {
         check(false)
         indent[depth] = false
@@ -536,13 +526,13 @@ class KMPSerializerParser : KMPXmlSerializer {
         return this
     }
 
-    @Throws(IOException::class)
+
     fun text(text: CharArray, start: Int, len: Int): XmlSerializer {
         text(String(text, start, len))
         return this
     }
 
-    @Throws(IOException::class)
+
     fun cdsect(data: String) {
         check(false)
         writer!!.write("<![CDATA[")
@@ -550,7 +540,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         writer!!.write("]]>")
     }
 
-    @Throws(IOException::class)
+
     fun comment(comment: String) {
         check(false)
         writer!!.write("<!--")
@@ -558,7 +548,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         writer!!.write("-->")
     }
 
-    @Throws(IOException::class)
+
     fun processingInstruction(pi: String) {
         check(false)
         writer!!.write("<?")

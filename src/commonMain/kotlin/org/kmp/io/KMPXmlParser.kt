@@ -101,7 +101,6 @@ class KMPXmlParser : KMPPullParser {
             n1.substring(40) == n2
     }
 
-    @Throws(XmlPullParserException::class)
     private fun adjustNsp(): Boolean {
 
         var any = false
@@ -229,7 +228,7 @@ class KMPXmlParser : KMPPullParser {
         return bigger
     }
 
-    @Throws(XmlPullParserException::class)
+
     private fun error(desc: String) {
         if (relaxed) {
             if (error == null)
@@ -238,7 +237,6 @@ class KMPXmlParser : KMPPullParser {
             exception(desc)
     }
 
-    @Throws(XmlPullParserException::class)
     private fun exception(desc: String) {
         throw XmlPullParserException(
             if (desc.length < 100) desc else desc.substring(0, 100) + "\n",
@@ -250,7 +248,6 @@ class KMPXmlParser : KMPPullParser {
      * common base for next and nextToken. Clears the state, except from
      * txtPos and whitespace. Does not set the type variable  */
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun nextImpl() {
 
         if (reader == null)
@@ -343,7 +340,6 @@ class KMPXmlParser : KMPPullParser {
         }
     }
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun parseLegacy(push: Boolean): Int {
         var push = push
 
@@ -471,7 +467,6 @@ class KMPXmlParser : KMPPullParser {
 
     /** precondition: &lt! consumed  */
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun parseDoctype(push: Boolean) {
 
         var nesting = 1
@@ -505,7 +500,6 @@ class KMPXmlParser : KMPPullParser {
 
     /* precondition: &lt;/ consumed */
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun parseEndTag() {
 
         read() // '<'
@@ -548,7 +542,6 @@ class KMPXmlParser : KMPPullParser {
         }
     }
 
-    @Throws(IOException::class)
     private fun peekType(): Int {
         when (peek(0)) {
             -1 -> return END_DOCUMENT
@@ -596,7 +589,6 @@ class KMPXmlParser : KMPPullParser {
 
     /** Sets name and attributes  */
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun parseStartTag(xmldecl: Boolean) {
 
         if (!xmldecl)
@@ -720,7 +712,6 @@ class KMPXmlParser : KMPPullParser {
      * result: isWhitespace; if the setName parameter is set,
      * the name of the entity is stored in "name"  */
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun pushEntity() {
 
         push(read()) // &
@@ -791,7 +782,6 @@ class KMPXmlParser : KMPPullParser {
      * ' ': parse to whitespace or '>'
      */
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun pushText(delimiter: Int, resolveEntities: Boolean) {
 
         var next = peek(0)
@@ -826,14 +816,12 @@ class KMPXmlParser : KMPPullParser {
         }
     }
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun read(c: Char) {
         val a = read()
         if (a != c.toInt())
             error("expected: '" + c + "' actual: '" + a.toChar() + "'")
     }
 
-    @Throws(IOException::class)
     private fun read(): Int {
         val result: Int
 
@@ -862,7 +850,6 @@ class KMPXmlParser : KMPPullParser {
 
     /** Does never read more than needed  */
 
-    @Throws(IOException::class)
     private fun peek(pos: Int): Int {
 
         while (pos >= peekCount) {
@@ -900,7 +887,6 @@ class KMPXmlParser : KMPPullParser {
         return peek[pos]
     }
 
-    @Throws(IOException::class, XmlPullParserException::class)
     private fun readName(): String {
 
         val pos = txtPos
@@ -932,7 +918,6 @@ class KMPXmlParser : KMPPullParser {
         return result
     }
 
-    @Throws(IOException::class)
     private fun skip() {
 
         while (true) {
@@ -945,7 +930,6 @@ class KMPXmlParser : KMPPullParser {
 
     //  public part starts here...
 
-    @Throws(XmlPullParserException::class)
     fun setInput(reader: Reader?) {
         this.reader = reader
 
@@ -976,7 +960,6 @@ class KMPXmlParser : KMPPullParser {
         entityMap!!.put("quot", "\"")
     }
 
-    @Throws(XmlPullParserException::class)
     fun setInput(`is`: InputStream?, _enc: String) {
 
         srcPos = 0
@@ -1116,7 +1099,6 @@ class KMPXmlParser : KMPPullParser {
             false
     }
 
-    @Throws(XmlPullParserException::class)
     override fun defineEntityReplacementText(entity: String, value: String) {
         if (entityMap == null)
             throw RuntimeException("entity replacement text must be defined after setInput!")
@@ -1228,7 +1210,7 @@ class KMPXmlParser : KMPPullParser {
         return column
     }
 
-    @Throws(XmlPullParserException::class)
+
     override fun isWhitespace(): Boolean {
         if (type != TEXT && type != IGNORABLE_WHITESPACE && type != CDSECT)
             exception(ILLEGAL_TYPE)
@@ -1271,7 +1253,7 @@ class KMPXmlParser : KMPPullParser {
         return prefix
     }
 
-    @Throws(XmlPullParserException::class)
+
     override fun isEmptyElementTag(): Boolean {
         if (type != START_TAG)
             exception(ILLEGAL_TYPE)
@@ -1326,12 +1308,12 @@ class KMPXmlParser : KMPPullParser {
         return null
     }
 
-    @Throws(XmlPullParserException::class)
+
     override fun getEventType(): Int {
         return type
     }
 
-    @Throws(XmlPullParserException::class, IOException::class)
+
     override fun next(): Int {
 
         txtPos = 0
@@ -1355,7 +1337,6 @@ class KMPXmlParser : KMPPullParser {
         return type
     }
 
-    @Throws(XmlPullParserException::class, IOException::class)
     override fun nextToken(): Int {
 
         isWhitespace = true
@@ -1369,7 +1350,6 @@ class KMPXmlParser : KMPPullParser {
     //
     // utility methods to make XML parsing easier ...
 
-    @Throws(XmlPullParserException::class, IOException::class)
     fun nextTag(): Int {
 
         next()
@@ -1382,7 +1362,6 @@ class KMPXmlParser : KMPPullParser {
         return type
     }
 
-    @Throws(XmlPullParserException::class, IOException::class)
     override fun require(type: Int, namespace: String?, name: String?) {
 
         if (type != this.type
@@ -1394,7 +1373,7 @@ class KMPXmlParser : KMPPullParser {
             )
     }
 
-    @Throws(XmlPullParserException::class, IOException::class)
+
     fun nextText(): String {
         if (type != START_TAG)
             exception("precondition: START_TAG")
@@ -1415,7 +1394,7 @@ class KMPXmlParser : KMPPullParser {
         return result
     }
 
-    @Throws(XmlPullParserException::class)
+
     override fun setFeature(feature: String, value: Boolean) {
         if (XmlPullParser.FEATURE_PROCESS_NAMESPACES.equals(feature))
             processNsp = value
@@ -1425,7 +1404,7 @@ class KMPXmlParser : KMPPullParser {
             exception("unsupported feature: $feature")
     }
 
-    @Throws(XmlPullParserException::class)
+
     override fun setProperty(property: String, value: Any) {
         if (isProp(property, true, "location"))
             location = value
@@ -1441,7 +1420,7 @@ class KMPXmlParser : KMPPullParser {
 
     //	Implementation copied from Alek's mail...
 
-    @Throws(XmlPullParserException::class, IOException::class)
+
     fun skipSubTree() {
         require(START_TAG, null, null)
         var level = 1
