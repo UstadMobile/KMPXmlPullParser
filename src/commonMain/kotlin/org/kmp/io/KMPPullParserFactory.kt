@@ -65,7 +65,7 @@ protected constructor() {
             val value = features.get(XmlPullParser.FEATURE_PROCESS_NAMESPACES) as Boolean
             return if (value != null) value!!.booleanValue() else false
         }
-        @Throws(XmlPullParserException::class)
+
         set(awareness) {
             features.put(XmlPullParser.FEATURE_PROCESS_NAMESPACES, awareness)
         }
@@ -89,7 +89,6 @@ protected constructor() {
             val value = features.get(XmlPullParser.FEATURE_VALIDATION) as Boolean
             return if (value != null) value!!.booleanValue() else false
         }
-        @Throws(XmlPullParserException::class)
         set(validating) {
             features.put(XmlPullParser.FEATURE_VALIDATION, validating)
         }
@@ -100,7 +99,6 @@ protected constructor() {
      * @param name string with URI identifying feature
      * @param state if true feature will be set; if false will be ignored
      */
-    @Throws(XmlPullParserException::class)
     fun setFeature(
         name: String,
         state: Boolean
@@ -129,7 +127,6 @@ protected constructor() {
      * @throws XmlPullParserException if a parser cannot be created which satisfies the
      * requested configuration.
      */
-    @Throws(XmlPullParserException::class)
     abstract fun newPullParser(): XmlPullParser
 
     companion object {
@@ -154,7 +151,6 @@ protected constructor() {
          * @param factoryClassName use specified factory class if not null
          * @return result of call to newInstance(null, factoryClassName)
          */
-        @Throws(XmlPullParserException::class)
         fun newInstance(factoryClassName: String): XmlPullParserFactory {
             return newInstance(null, factoryClassName)
         }
@@ -182,12 +178,8 @@ protected constructor() {
          * @param hint with name of parser factory to use -
          * it is a hint and is ignored if factory is not available.
          */
-        @Throws(XmlPullParserException::class)
         @JvmOverloads
-        fun newInstance(
-            classLoaderCtx: Class<*>? = null,
-            factoryClassName: String? = null
-        ): XmlPullParserFactory {
+        fun newInstance(classLoaderCtx: Class<*>? = null, factoryClassName: String? = null): XmlPullParserFactory {
             var factoryClassName = factoryClassName
 
             // if user hinted factory then try to use it ...
@@ -373,7 +365,6 @@ protected constructor() {
          *
          * @throws   IOException
          */
-        @Throws(IOException::class)
         private fun readLine(input: InputStream): String {
             val sb = StringBuffer()
 
