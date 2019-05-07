@@ -87,7 +87,6 @@ interface XmlSerializer {
      *
      * @exception IllegalStateException If the feature is not supported or can not be set
      */
-    @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun setFeature(name: String, state: Boolean)
 
     /**
@@ -113,7 +112,6 @@ interface XmlSerializer {
      *
      * @exception IllegalStateException if the property is not supported or can not be set
      */
-    @Throws(IllegalArgumentException::class, IllegalStateException::class)
     fun setProperty(name: String, value: Any)
 
     /**
@@ -131,7 +129,6 @@ interface XmlSerializer {
     /**
      * Set to use binary output stream with given encoding.
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun setOutput(os: OutputStream, encoding: String)
 
     /**
@@ -139,7 +136,6 @@ interface XmlSerializer {
      *
      * **WARNING** no information about encoding is available!
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun setOutput(writer: Writer)
 
     /**
@@ -147,7 +143,6 @@ interface XmlSerializer {
      * and standalone flag (if standalone not null)
      * This method can only be called just after setOutput.
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun startDocument(encoding: String, standalone: Boolean?)
 
     /**
@@ -155,7 +150,6 @@ interface XmlSerializer {
      * will be flushed. After calling this method no more output can be
      * serialized until next call to setOutput()
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun endDocument()
 
     /**
@@ -180,7 +174,6 @@ interface XmlSerializer {
      * @param prefix must be not null (or IllegalArgumentException is thrown)
      * @param namespace must be not null
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun setPrefix(prefix: String, namespace: String)
 
     /**
@@ -197,7 +190,6 @@ interface XmlSerializer {
      * will have values as defined
      * [Namespaces in XML specification](http://www.w3.org/TR/REC-xml-names/)
      */
-    @Throws(IllegalArgumentException::class)
     fun getPrefix(namespace: String, generatePrefix: Boolean): String
 
     /**
@@ -212,7 +204,6 @@ interface XmlSerializer {
      * or throw IllegalStateException if default namespace is already bound
      * to non-empty string.
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun startTag(namespace: String, name: String): XmlSerializer
 
     /**
@@ -222,7 +213,6 @@ interface XmlSerializer {
      * If namespace is null or empty string
      * no namespace prefix is printed but just name.
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun attribute(namespace: String, name: String, value: String): XmlSerializer
 
     /**
@@ -234,7 +224,6 @@ interface XmlSerializer {
      * If namespace is empty string then serializer will make sure that
      * default empty namespace is declared (in XML 1.0 xmlns='').
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun endTag(namespace: String, name: String): XmlSerializer
     //    /**
     //     * Writes a start tag with the given namespace and name.
@@ -291,31 +280,23 @@ interface XmlSerializer {
     /**
      * Writes text, where special XML chars are escaped automatically
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun text(text: String): XmlSerializer
 
     /**
      * Writes text, where special XML chars are escaped automatically
      */
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun text(buf: CharArray, start: Int, len: Int): XmlSerializer
 
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun cdsect(text: String)
 
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun entityRef(text: String)
 
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun processingInstruction(text: String)
 
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun comment(text: String)
 
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun docdecl(text: String)
 
-    @Throws(IOException::class, IllegalArgumentException::class, IllegalStateException::class)
     fun ignorableWhitespace(text: String)
 
     /**
@@ -329,6 +310,5 @@ interface XmlSerializer {
      * call method text() with empty string (text("")).
      *
      */
-    @Throws(IOException::class)
     fun flush()
 }
