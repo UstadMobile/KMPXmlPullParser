@@ -29,7 +29,7 @@ class KMPPullParserException : Exception {
     }
 
 
-    constructor(msg: String, parser: XmlPullParser) : super(msg + parser.getPositionDescription()) {
+    constructor(msg: String, parser: KMPPullParser) : super(msg + parser.getPositionDescription()) {
         this.lineNumber = parser.getLineNumber()
         this.columnNumber = parser.getColumnNumber()
     }

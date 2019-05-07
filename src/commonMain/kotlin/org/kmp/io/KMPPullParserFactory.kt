@@ -59,12 +59,10 @@ protected constructor() {
      */
     var isNamespaceAware: Boolean
         get() {
-            val value = features.get(XmlPullParser.FEATURE_PROCESS_NAMESPACES) as Boolean
-            return if (value != null) value!!.booleanValue() else false
+            return features[KMPPullParser.FEATURE_PROCESS_NAMESPACES] as Boolean
         }
-
         set(awareness) {
-            features.put(XmlPullParser.FEATURE_PROCESS_NAMESPACES, awareness)
+            features[KMPPullParser.FEATURE_PROCESS_NAMESPACES] = awareness
         }
 
     /**
@@ -83,11 +81,10 @@ protected constructor() {
      */
     var isValidating: Boolean
         get() {
-            val value = features.get(XmlPullParser.FEATURE_VALIDATION) as Boolean
-            return if (value != null) value!!.booleanValue() else false
+            return features[KMPPullParser.FEATURE_VALIDATION]?: false
         }
         set(validating) {
-            features.put(XmlPullParser.FEATURE_VALIDATION, validating)
+            features[KMPPullParser.FEATURE_VALIDATION] = validating
         }
 
     /**
@@ -96,10 +93,7 @@ protected constructor() {
      * @param name string with URI identifying feature
      * @param state if true feature will be set; if false will be ignored
      */
-    fun setFeature(
-        name: String,
-        state: Boolean
-    ) {
+    fun setFeature(name: String, state: Boolean) {
         features.put(name, state)
     }
 
@@ -111,8 +105,7 @@ protected constructor() {
      * Unknown features are <string>always returned as false
     </string> */
     fun getFeature(name: String): Boolean {
-        val value = features.get(name) as Boolean
-        return if (value != null) value!!.booleanValue() else false
+        return features[name]?: false
     }
 
     /**
@@ -124,7 +117,7 @@ protected constructor() {
      * @throws XmlPullParserException if a parser cannot be created which satisfies the
      * requested configuration.
      */
-    abstract fun newPullParser(): XmlPullParser
+    abstract fun newPullParser(): KMPPullParser
 
     companion object {
         private val DEBUG = false
@@ -201,7 +194,8 @@ protected constructor() {
                     if (DEBUG) ex.printStackTrace()
                     throw KMPPullParserException(
                         "could not create instance of XMLPULL factory for class " + factoryClassName
-                                + " (root exception:" + ex + ")", ex)
+                                + " (root exception:" + ex + ")", ex
+                    )
                 }
 
             }
@@ -276,7 +270,8 @@ protected constructor() {
 
                     } catch (ex3: Exception) {
                         throw KMPPullParserException(
-                            ("could not load any factory class " + "(even small or full default implementation)"), ex3)
+                            ("could not load any factory class " + "(even small or full default implementation)"), ex3
+                        )
                     }
 
                 }

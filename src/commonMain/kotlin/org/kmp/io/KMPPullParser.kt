@@ -122,7 +122,7 @@ import kotlinx.io.Reader
  * @author [Aleksander Slominski](http://www.extreme.indiana.edu/~aslom/)
  */
 
-interface XmlPullParser {
+interface KMPPullParser {
 
 
     // --------------------------------------------------------------------------
