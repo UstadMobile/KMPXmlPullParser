@@ -52,7 +52,8 @@ interface XmlSerializer {
      * &lt;!-- outside --&gt;     0
     </pre> *
      */
-    val depth: Int
+    fun getDepth(): Int
+
     /**
      * Returns the namespace URI of the current element as set by startTag().
      *
@@ -64,7 +65,8 @@ interface XmlSerializer {
      *
      * @return namespace set by startTag() that is currently in scope
      */
-    val namespace: String
+    fun getNamespace(): String
+
     /**
      * Returns the name of the current element as set by startTag().
      * It can only be null before first call to startTag()
@@ -72,7 +74,7 @@ interface XmlSerializer {
      *
      * @return namespace set by startTag() that is currently in scope
      */
-    val name: String
+    fun getName(): String
 
     /**
      * Set feature identified by name (recommended to be URI for uniqueness).
@@ -86,10 +88,7 @@ interface XmlSerializer {
      * @exception IllegalStateException If the feature is not supported or can not be set
      */
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
-    fun setFeature(
-        name: String,
-        state: Boolean
-    )
+    fun setFeature(name: String, state: Boolean)
 
     /**
      * Return the current value of the feature with given name.
@@ -115,10 +114,7 @@ interface XmlSerializer {
      * @exception IllegalStateException if the property is not supported or can not be set
      */
     @Throws(IllegalArgumentException::class, IllegalStateException::class)
-    fun setProperty(
-        name: String,
-        value: Any
-    )
+    fun setProperty(name: String, value: Any)
 
     /**
      * Look up the value of a property.
