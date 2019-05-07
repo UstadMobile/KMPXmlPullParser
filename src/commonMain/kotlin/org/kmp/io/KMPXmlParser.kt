@@ -158,13 +158,7 @@ class KMPXmlParser : KMPPullParser {
 
                     //System.out.println (prefixMap);
 
-                    System.arraycopy(
-                        attributes,
-                        i + 4,
-                        attributes,
-                        i,
-                        (--attributeCount shl 2) - i
-                    )
+                    System.arraycopy(attributes, i + 4, attributes, i, (--attributeCount shl 2) - i)
 
                     i -= 4
                 }
@@ -500,12 +494,12 @@ class KMPXmlParser : KMPPullParser {
                     return
                 }
 
-                '\'' -> quoted = !quoted
+                '\''.toInt() -> quoted = !quoted
 
-                '<' -> if (!quoted)
+                '<'.toInt() -> if (!quoted)
                     nesting++
 
-                '>' -> if (!quoted) {
+                '>'.toInt() -> if (!quoted) {
                     if (--nesting == 0)
                         return
                 }
@@ -562,10 +556,10 @@ class KMPXmlParser : KMPPullParser {
     private fun peekType(): Int {
         when (peek(0)) {
             -1 -> return END_DOCUMENT
-            '&' -> return ENTITY_REF
-            '<' -> when (peek(1)) {
-                '/' -> return END_TAG
-                '?', '!' -> return LEGACY
+            '&'.toInt() -> return ENTITY_REF
+            '<'.toInt() -> when (peek(1)) {
+                '/'.toInt() -> return END_TAG
+                '?'.toInt(), '!'.toInt() -> return LEGACY
                 else -> return START_TAG
             }
             else -> return TEXT
@@ -817,7 +811,7 @@ class KMPXmlParser : KMPPullParser {
                 pushEntity()
             } else if (next == '\n'.toInt() && type == START_TAG) {
                 read()
-                push(' ')
+                push(' '.toInt())
             } else
                 push(read())
 
