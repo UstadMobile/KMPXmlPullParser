@@ -42,16 +42,4 @@ class XmlPullParserException : Exception {
                     + detail!!.message
     }
 
-    //NOTE: code that prints this and detail is difficult in J2ME
-    override fun printStackTrace() {
-        if (detail == null) {
-            super.printStackTrace()
-        } else {
-            synchronized(System.err) {
-                System.err.println(super.message + "; nested exception is:")
-                detail!!.printStackTrace()
-            }
-        }
-    }
-
 }
