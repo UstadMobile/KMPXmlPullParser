@@ -33,7 +33,7 @@ import kotlinx.io.Writer
  * to use an optional feature to signal that implementation is not
  * supporting this kind of output.
  */
-interface XmlSerializer {
+interface KMPXmlSerializer {
     /**
      * Returns the current depth of the element.
      * Outside the root element, the depth is 0. The
@@ -64,7 +64,7 @@ interface XmlSerializer {
      *
      * @return namespace set by startTag() that is currently in scope
      */
-    fun getNamespace(): String
+    fun getNamespace(): String?
 
     /**
      * Returns the name of the current element as set by startTag().
@@ -73,7 +73,7 @@ interface XmlSerializer {
      *
      * @return namespace set by startTag() that is currently in scope
      */
-    fun getName(): String
+    fun getName(): String?
 
     /**
      * Set feature identified by name (recommended to be URI for uniqueness).
@@ -128,7 +128,7 @@ interface XmlSerializer {
     /**
      * Set to use binary output stream with given encoding.
      */
-    fun setOutput(os: OutputStream, encoding: String)
+    fun setOutput(os: OutputStream?, encoding: String?)
 
     /**
      * Set the output to the given writer.
@@ -142,7 +142,7 @@ interface XmlSerializer {
      * and standalone flag (if standalone not null)
      * This method can only be called just after setOutput.
      */
-    fun startDocument(encoding: String, standalone: Boolean?)
+    fun startDocument(encoding: String?, standalone: Boolean?)
 
     /**
      * Finish writing. All unclosed start tags will be closed and output
@@ -173,7 +173,7 @@ interface XmlSerializer {
      * @param prefix must be not null (or IllegalArgumentException is thrown)
      * @param namespace must be not null
      */
-    fun setPrefix(prefix: String, namespace: String)
+    fun setPrefix(prefix: String?, namespace: String?)
 
     /**
      * Return namespace that corresponds to given prefix
@@ -203,7 +203,7 @@ interface XmlSerializer {
      * or throw IllegalStateException if default namespace is already bound
      * to non-empty string.
      */
-    fun startTag(namespace: String, name: String): XmlSerializer
+    fun startTag(namespace: String?, name: String): KMPXmlSerializer
 
     /**
      * Write an attribute. Calls to attribute() MUST follow a call to
@@ -212,7 +212,7 @@ interface XmlSerializer {
      * If namespace is null or empty string
      * no namespace prefix is printed but just name.
      */
-    fun attribute(namespace: String, name: String, value: String): XmlSerializer
+    fun attribute(namespace: String?, name: String, value: String): KMPXmlSerializer
 
     /**
      * Write end tag. Repetition of namespace and name is just for avoiding errors.
@@ -223,7 +223,7 @@ interface XmlSerializer {
      * If namespace is empty string then serializer will make sure that
      * default empty namespace is declared (in XML 1.0 xmlns='').
      */
-    fun endTag(namespace: String, name: String): XmlSerializer
+    fun endTag(namespace: String?, name: String): KMPXmlSerializer
     //    /**
     //     * Writes a start tag with the given namespace and name.
     //     * <br />If there is no prefix defined (prefix == null) for the given namespace,
@@ -279,12 +279,12 @@ interface XmlSerializer {
     /**
      * Writes text, where special XML chars are escaped automatically
      */
-    fun text(text: String): XmlSerializer
+    fun text(text: String): KMPXmlSerializer
 
     /**
      * Writes text, where special XML chars are escaped automatically
      */
-    fun text(buf: CharArray, start: Int, len: Int): XmlSerializer
+    fun text(buf: CharArray, start: Int, len: Int): KMPXmlSerializer
 
     fun cdsect(text: String)
 

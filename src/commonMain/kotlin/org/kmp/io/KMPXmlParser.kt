@@ -178,7 +178,7 @@ class KMPXmlParser : KMPPullParser {
                 else if (cut != -1) {
                     val attrPrefix = attrName?.substring(0, cut)
 
-                    attrName = attrName.substring(cut + 1)
+                    attrName = attrName?.substring(cut + 1)
 
                     val attrNs = getNamespace(attrPrefix)
 

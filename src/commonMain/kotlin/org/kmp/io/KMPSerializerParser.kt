@@ -26,7 +26,7 @@ import kotlinx.io.OutputStream
 import kotlinx.io.Writer
 import org.kmp.OutputStreamWriter
 
-class KMPSerializerParser : KMPSerializerParser {
+class KMPSerializerParser : KMPXmlSerializer {
 
     //    static final String UNDEFINED = ":";
 
@@ -44,12 +44,6 @@ class KMPSerializerParser : KMPSerializerParser {
     private var indent = BooleanArray(4)
     private var unicode: Boolean = false
     private var encoding: String? = null
-
-    val namespace: String?
-        get() = if (getDepth() == 0) null else elementStack[getDepth() * 3 - 3]
-
-    val name: String?
-        get() = if (getDepth() == 0) null else elementStack[getDepth() * 3 - 1]
 
     private fun check(close: Boolean) {
         if (!pending)
@@ -160,13 +154,13 @@ class KMPSerializerParser : KMPSerializerParser {
     			writer.write(' ');
     	}*/
 
-    fun docdecl(dd: String) {
+    override fun docdecl(dd: String) {
         writer!!.write("<!DOCTYPE")
         writer!!.write(dd)
         writer!!.write(">")
     }
 
-    fun endDocument() {
+    override fun endDocument() {
         while (depth > 0) {
             endTag(
                 elementStack[depth * 3 - 3],
@@ -177,14 +171,14 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun entityRef(name: String) {
+    override fun entityRef(name: String) {
         check(false)
         writer!!.write('&')
         writer!!.write(name)
         writer!!.write(';')
     }
 
-    fun getFeature(name: String): Boolean {
+    override fun getFeature(name: String): Boolean {
         //return false;
         return if ("http://xmlpull.org/v1/doc/features.html#indent-output" == name)
             indent[depth]
@@ -192,7 +186,7 @@ class KMPSerializerParser : KMPSerializerParser {
             false
     }
 
-    fun getPrefix(namespace: String, create: Boolean): String? {
+    override fun getPrefix(namespace: String, create: Boolean): String? {
         try {
             return getPrefix(namespace, false, create)
         } catch (e: IOException) {
@@ -201,11 +195,16 @@ class KMPSerializerParser : KMPSerializerParser {
 
     }
 
-    private fun getPrefix(
-        namespace: String,
-        includeDefault: Boolean,
-        create: Boolean
-    ): String? {
+    override fun getNamespace(): String? {
+        return if (getDepth() == 0) null else elementStack[getDepth() * 3 - 3]
+    }
+
+
+    override fun getName(): String? {
+        return if (getDepth() == 0) null else elementStack[getDepth() * 3 - 1]
+    }
+
+    private fun getPrefix(namespace: String, includeDefault: Boolean, create: Boolean): String? {
 
         run {
             var i = nspCounts[depth + 1] * 2 - 2
@@ -253,29 +252,29 @@ class KMPSerializerParser : KMPSerializerParser {
         return prefix
     }
 
-    fun getProperty(name: String): Any {
+    override fun getProperty(name: String): Any {
         throw RuntimeException("Unsupported property")
     }
 
 
-    fun ignorableWhitespace(s: String) {
+    override fun ignorableWhitespace(s: String) {
         text(s)
     }
 
-    fun setFeature(name: String, value: Boolean) {
+    override fun setFeature(name: String, value: Boolean) {
         if ("http://xmlpull.org/v1/doc/features.html#indent-output" == name) {
             indent[depth] = value
         } else
             throw RuntimeException("Unsupported Feature")
     }
 
-    fun setProperty(name: String, value: Any) {
+    override fun setProperty(name: String, value: Any) {
         throw RuntimeException(
             "Unsupported Property:$value"
         )
     }
 
-    fun setPrefix(prefix: String?, namespace: String?) {
+    override fun setPrefix(prefix: String?, namespace: String?) {
         var prefix = prefix
         var namespace = namespace
 
@@ -304,7 +303,7 @@ class KMPSerializerParser : KMPSerializerParser {
         nspStack[pos] = namespace
     }
 
-    fun setOutput(writer: Writer) {
+    override fun setOutput(writer: Writer) {
         this.writer = writer
 
         // elementStack = new String[12]; //nsp/prefix/name
@@ -326,7 +325,7 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun setOutput(os: OutputStream?, encoding: String?) {
+    override fun setOutput(os: OutputStream?, encoding: String?) {
         if (os == null)
             throw IllegalArgumentException()
         setOutput(
@@ -341,10 +340,7 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun startDocument(
-        encoding: String?,
-        standalone: Boolean?
-    ) {
+    override fun startDocument(encoding: String?, standalone: Boolean?) {
         writer!!.write("<?xml version='1.0' ")
 
         if (encoding != null) {
@@ -370,7 +366,7 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun startTag(namespace: String?, name: String): XmlSerializer {
+    override fun startTag(namespace: String?, name: String): KMPXmlSerializer {
         check(false)
 
         //        if (namespace == null)
@@ -421,7 +417,7 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun attribute(namespace: String?, name: String, value: String): XmlSerializer {
+    override fun attribute(namespace: String?, name: String, value: String): KMPXmlSerializer {
         var namespace = namespace
         if (!pending)
             throw IllegalStateException("illegal position for attribute")
@@ -470,7 +466,7 @@ class KMPSerializerParser : KMPSerializerParser {
         return this
     }
 
-    fun flush() {
+    override fun flush() {
         check(false)
         writer!!.flush()
     }
@@ -482,7 +478,7 @@ class KMPSerializerParser : KMPSerializerParser {
     	}
     */
 
-    fun endTag(namespace: String?, name: String): XmlSerializer {
+    override fun endTag(namespace: String?, name: String): KMPXmlSerializer {
 
         if (!pending)
             depth--
@@ -519,12 +515,12 @@ class KMPSerializerParser : KMPSerializerParser {
         return this
     }
 
-    fun getDepth(): Int {
+    override fun getDepth(): Int {
         return if (pending) depth + 1 else depth
     }
 
 
-    fun text(text: String): XmlSerializer {
+    override fun text(text: String): KMPXmlSerializer {
         check(false)
         indent[depth] = false
         writeEscaped(text, -1)
@@ -532,13 +528,13 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun text(text: CharArray, start: Int, len: Int): XmlSerializer {
+    override fun text(text: CharArray, start: Int, len: Int): KMPXmlSerializer {
         text(String(text, start, len))
         return this
     }
 
 
-    fun cdsect(data: String) {
+    override fun cdsect(data: String) {
         check(false)
         writer!!.write("<![CDATA[")
         writer!!.write(data)
@@ -546,7 +542,7 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun comment(comment: String) {
+    override fun comment(comment: String) {
         check(false)
         writer!!.write("<!--")
         writer!!.write(comment)
@@ -554,7 +550,7 @@ class KMPSerializerParser : KMPSerializerParser {
     }
 
 
-    fun processingInstruction(pi: String) {
+    override fun processingInstruction(pi: String) {
         check(false)
         writer!!.write("<?")
         writer!!.write(pi)
