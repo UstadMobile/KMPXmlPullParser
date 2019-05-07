@@ -54,7 +54,9 @@ class KMPSerializerParser : KMPXmlSerializer {
 
         if (indent.size <= depth) {
             val hlp = BooleanArray(depth + 4)
-            System.arraycopy(indent, 0, hlp, 0, depth)
+            //System.arraycopy(indent, 0, hlp, 0, depth)
+            indent.copyInto(hlp, 0, 0 , depth)
+
             indent = hlp
         }
         indent[depth] = indent[depth - 1]
@@ -74,7 +76,8 @@ class KMPSerializerParser : KMPXmlSerializer {
 
         if (nspCounts.size <= depth + 1) {
             val hlp = IntArray(depth + 8)
-            System.arraycopy(nspCounts, 0, hlp, 0, depth + 1)
+            //System.arraycopy(nspCounts, 0, hlp, 0, depth + 1)
+            nspCounts.copyInto(hlp, 0, 0 , depth + 1)
             nspCounts = hlp
         }
 
@@ -295,7 +298,8 @@ class KMPSerializerParser : KMPXmlSerializer {
 
         if (nspStack.size < pos + 1) {
             val hlp = arrayOfNulls<String>(nspStack.size + 16)
-            System.arraycopy(nspStack, 0, hlp, 0, pos)
+            //System.arraycopy(nspStack, 0, hlp, 0, pos)
+            nspStack.copyInto(hlp, 0, 0 , pos)
             nspStack = hlp
         }
 
@@ -358,7 +362,7 @@ class KMPSerializerParser : KMPXmlSerializer {
         if (standalone != null) {
             writer!!.write("standalone='")
             writer!!.write(
-                if (standalone.booleanValue()) "yes" else "no"
+                if (standalone) "yes" else "no"
             )
             writer!!.write("' ")
         }
@@ -382,7 +386,8 @@ class KMPSerializerParser : KMPXmlSerializer {
 
         if (elementStack.size < esp + 3) {
             val hlp = arrayOfNulls<String>(elementStack.size + 12)
-            System.arraycopy(elementStack, 0, hlp, 0, esp)
+            //System.arraycopy(elementStack, 0, hlp, 0, esp)
+            elementStack.copyInto(hlp, 0, 0 , esp)
             elementStack = hlp
         }
 
