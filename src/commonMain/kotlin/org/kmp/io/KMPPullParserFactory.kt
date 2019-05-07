@@ -3,11 +3,8 @@
 
 package org.kmp.io
 
-import java.io.InputStream
-import java.io.IOException
-import java.io.Reader
-import java.io.Writer
-import java.util.Hashtable
+import kotlinx.io.InputStream
+import kotlin.jvm.JvmOverloads
 
 /**
  * This class is used to create implementations of XML Pull Parser defined in XMPULL V1 API.
@@ -139,7 +136,7 @@ protected constructor() {
         val DEFAULT_PROPERTY_NAME = "org.xmlpull.v1.XmlPullParserFactory"
 
         //private static Class MY_CLASS;
-        private val MY_REF = XmlPullParserException()//new XmlPullParserFactory();
+        private val MY_REF = KMPPullParserException()//new XmlPullParserFactory();
         private val DEFAULT_KXML_IMPL_FACTORY_CLASS_NAME = "org.kxml2.io.XmlReader"
         private val DEFAULT_XPP_IMPL_FACTORY_CLASS_NAME = "org.xmlpull.xpp3.factory.Xpp3Factory"
         private val DEFAULT_RESOURCE_NAME = "/META-INF/services/$DEFAULT_PROPERTY_NAME"
@@ -151,7 +148,7 @@ protected constructor() {
          * @param factoryClassName use specified factory class if not null
          * @return result of call to newInstance(null, factoryClassName)
          */
-        fun newInstance(factoryClassName: String): XmlPullParserFactory {
+        fun newInstance(factoryClassName: String): KMPPullParserFactory {
             return newInstance(null, factoryClassName)
         }
 
@@ -179,13 +176,13 @@ protected constructor() {
          * it is a hint and is ignored if factory is not available.
          */
         @JvmOverloads
-        fun newInstance(classLoaderCtx: Class<*>? = null, factoryClassName: String? = null): XmlPullParserFactory {
+        fun newInstance(classLoaderCtx: Class<*>? = null, factoryClassName: String? = null): KMPPullParserException {
             var factoryClassName = factoryClassName
 
             // if user hinted factory then try to use it ...
 
 
-            var factoryImpl: XmlPullParserFactory? = null
+            var factoryImpl: KMPPullParserFactory? = null
             if (factoryClassName != null) {
                 try {
                     //*
@@ -195,17 +192,16 @@ protected constructor() {
                     } else {
                         clazz = Class.forName(factoryClassName)
                     }
-                    factoryImpl = clazz!!.newInstance() as XmlPullParserFactory
+                    factoryImpl = clazz!!.newInstance() as KMPPullParserFactory
                     //foundFactoryClassName = factoryClassName;
                     //*/
                     if (DEBUG) debug("loaded factoryClassName " + clazz!!)
                 } catch (ex: Exception) {
                     if (DEBUG) debug("failed to load factoryClassName " + factoryClassName!!)
                     if (DEBUG) ex.printStackTrace()
-                    throw XmlPullParserException(
+                    throw KMPPullParserException(
                         "could not create instance of XMLPULL factory for class " + factoryClassName
-                                + " (root exception:" + ex + ")", ex
-                    )
+                                + " (root exception:" + ex + ")", ex)
                 }
 
             }
@@ -249,7 +245,7 @@ protected constructor() {
                     } else {
                         clazz = Class.forName(factoryClassName)
                     }
-                    factoryImpl = clazz!!.newInstance() as XmlPullParserFactory
+                    factoryImpl = clazz!!.newInstance() as KMPPullParserFactory
 
                     if (DEBUG)
                         debug(("using default full implementation " + factoryImpl!!))
@@ -267,7 +263,7 @@ protected constructor() {
                         } else {
                             clazz = Class.forName(factoryClassName)
                         }
-                        factoryImpl = clazz!!.newInstance() as XmlPullParserFactory
+                        factoryImpl = clazz!!.newInstance() as KMPPullParserFactory
 
                         if (DEBUG)
                             debug(
@@ -279,9 +275,8 @@ protected constructor() {
                         foundFactoryClassName = factoryClassName
 
                     } catch (ex3: Exception) {
-                        throw XmlPullParserException(
-                            ("could not load any factory class " + "(even small or full default implementation)"), ex3
-                        )
+                        throw KMPPullParserException(
+                            ("could not load any factory class " + "(even small or full default implementation)"), ex3)
                     }
 
                 }

@@ -4,7 +4,6 @@
 package org.kmp.io
 
 import kotlinx.io.Reader
-import org.kmp.io.XmlPullParserException
 
 /**
  * XML Pull Parser is an interface that defines parsing functionlity provided
