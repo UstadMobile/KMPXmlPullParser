@@ -21,6 +21,11 @@
 
 package org.kmp.io
 
+import kotlinx.io.IOException
+import kotlinx.io.OutputStream
+import kotlinx.io.Writer
+import org.kmp.OutputStreamWriter
+
 class KMPSerializerParser : KMPSerializerParser {
 
     //    static final String UNDEFINED = ":";
