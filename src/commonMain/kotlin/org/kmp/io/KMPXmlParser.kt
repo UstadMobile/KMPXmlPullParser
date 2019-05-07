@@ -135,7 +135,7 @@ class KMPXmlParser : KMPPullParser {
                     prefix = attrName!!.substring(0, cut)
                     attrName = attrName!!.substring(cut + 1)
                 } else if (attrName == "xmlns") {
-                    prefix = attrName
+                    prefix = attrName as String
                     attrName = null
                 } else {
                     i += 4
@@ -171,14 +171,12 @@ class KMPXmlParser : KMPPullParser {
             while (i >= 0) {
 
                 var attrName = attributes[i + 2]
-                val cut = attrName.indexOf(':')
+                val cut = attrName?.indexOf(':')?: -1
 
                 if (cut == 0 && !relaxed)
-                    throw RuntimeException(
-                        "illegal attribute name: $attrName at $this"
-                    )
+                    throw RuntimeException("illegal attribute name: $attrName at $this")
                 else if (cut != -1) {
-                    val attrPrefix = attrName.substring(0, cut)
+                    val attrPrefix = attrName?.substring(0, cut)
 
                     attrName = attrName.substring(cut + 1)
 
@@ -941,7 +939,7 @@ class KMPXmlParser : KMPPullParser {
 
     //  public part starts here...
 
-    fun setInput(reader: Reader?) {
+    override fun setInput(reader: Reader?) {
         this.reader = reader
 
         line = 1
@@ -1046,7 +1044,7 @@ class KMPXmlParser : KMPPullParser {
                                         while (s[i0] != '"' && s[i0] != '\'')
                                             i0++
                                         val deli = s[i0++]
-                                        val i1 = s.indexOf(deli.toInt(), i0)
+                                        val i1 = s.indexOf(deli, i0)
                                         enc = s.substring(i0, i1)
                                     }
                                     break
@@ -1134,7 +1132,7 @@ class KMPXmlParser : KMPPullParser {
         return nspStack[(pos shl 1) + 1]
     }
 
-    override fun getNamespace(prefix: String): String? {
+    override fun getNamespace(prefix: String?): String? {
 
         if ("xml" == prefix)
             return "http://www.w3.org/XML/1998/namespace"
@@ -1159,7 +1157,7 @@ class KMPXmlParser : KMPPullParser {
 
     override fun getPositionDescription(): String {
 
-        val buf = StringBuffer(if (type < TYPES.size) TYPES[type] else "unknown")
+        val buf = StringBuilder(if (type < TYPES.size) TYPES[type] else "unknown")
         buf.append(' ')
 
         if (type == START_TAG || type == END_TAG) {
@@ -1270,6 +1268,14 @@ class KMPXmlParser : KMPPullParser {
     override fun getAttributeCount(): Int {
         return attributeCount
     }
+
+    override fun readText(): String? {
+        if (type != TEXT) return ""
+        val result = getText()
+        next()
+        return result
+    }
+
 
     fun getAttributeType(index: Int): String {
         return "CDATA"

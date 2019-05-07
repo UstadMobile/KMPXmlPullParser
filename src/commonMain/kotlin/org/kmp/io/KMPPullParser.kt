@@ -197,7 +197,7 @@ interface KMPPullParser {
      * Read text content of the current event as String.
      */
 
-    fun getText(): String
+    fun getText(): String?
 
     // --------------------------------------------------------------------------
     // START_TAG / END_TAG shared methods
@@ -322,7 +322,7 @@ interface KMPPullParser {
      * Using null parameter will stop parsing and reset parser state
      * allowing parser to free internal resources (such as parsing buffers).
      */
-    fun setInput(`in`: Reader)
+    fun setInput(reader : Reader?)
 
     /**
      * Set new value for entity replacement text as defined in
@@ -418,7 +418,7 @@ interface KMPPullParser {
      */
 
 
-    fun getNamespace(prefix: String): String?
+    fun getNamespace(prefix: String?): String?
 
 
     /**
@@ -652,7 +652,7 @@ interface KMPPullParser {
      * return result;
     </pre> *
      */
-    fun readText(): String
+    fun readText(): String?
 
     companion object {
 
@@ -919,5 +919,4 @@ interface KMPPullParser {
          */
         val FEATURE_VALIDATION = "http://xmlpull.org/v1/doc/features.html#validation"
     }
-
 }

@@ -34,6 +34,12 @@ class KMPPullParserException : Exception {
         this.columnNumber = parser.getColumnNumber()
     }
 
+    constructor(msg: String, parser: KMPPullParser, e: Throwable) : super(msg + parser.getPositionDescription()) {
+        this.detail = e
+        this.lineNumber = parser.getLineNumber()
+        this.columnNumber = parser.getColumnNumber()
+    }
+
     override val message: String?
         get() = if (detail == null)
             super.message
