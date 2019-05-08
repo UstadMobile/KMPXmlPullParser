@@ -62,16 +62,16 @@ class KMPSerializerParser : KMPXmlSerializer {
         indent[depth] = indent[depth - 1]
 
         for (i in nspCounts[depth - 1] until nspCounts[depth]) {
-            writer!!.write(' ')
+            writer!!.write(" ")
             writer!!.write("xmlns")
             if ("" != nspStack[i * 2]) {
-                writer!!.write(':')
-                writer!!.write(nspStack[i * 2])
-            } else if ("" == namespace && "" != nspStack[i * 2 + 1])
+                writer!!.write(":")
+                writer!!.write(nspStack[i * 2]!!)
+            } else if ("" == getNamespace() && "" != nspStack[i * 2 + 1])
                 throw IllegalStateException("Cannot set default namespace for elements in no namespace")
             writer!!.write("=\"")
-            writeEscaped(nspStack[i * 2 + 1], '"')
-            writer!!.write('"')
+            writeEscaped(nspStack[i * 2 + 1]!!, '"'.toInt())
+            writer!!.write("\"")
         }
 
         if (nspCounts.size <= depth + 1) {
@@ -165,10 +165,7 @@ class KMPSerializerParser : KMPXmlSerializer {
 
     override fun endDocument() {
         while (depth > 0) {
-            endTag(
-                elementStack[depth * 3 - 3],
-                elementStack[depth * 3 - 1]
-            )
+            endTag(elementStack[depth * 3 - 3], elementStack[depth * 3 - 1]!!)
         }
         flush()
     }
@@ -176,9 +173,9 @@ class KMPSerializerParser : KMPXmlSerializer {
 
     override fun entityRef(name: String) {
         check(false)
-        writer!!.write('&')
+        writer!!.write("&")
         writer!!.write(name)
-        writer!!.write(';')
+        writer!!.write(";")
     }
 
     override fun getFeature(name: String): Boolean {
@@ -408,10 +405,10 @@ class KMPSerializerParser : KMPXmlSerializer {
         elementStack[esp++] = prefix
         elementStack[esp] = name
 
-        writer!!.write('<')
+        writer!!.write("<")
         if ("" != prefix) {
             writer!!.write(prefix!!)
-            writer!!.write(':')
+            writer!!.write(":")
         }
 
         writer!!.write(name)
@@ -456,13 +453,13 @@ class KMPSerializerParser : KMPXmlSerializer {
                 }
                 */
 
-        writer!!.write(' ')
+        writer!!.write(" ")
         if ("" != prefix) {
             writer!!.write(prefix!!)
-            writer!!.write(':')
+            writer!!.write(":")
         }
         writer!!.write(name)
-        writer!!.write('=')
+        writer!!.write("=")
         val q = if (value.indexOf('"') == -1) '"' else '\''
         writer!!.write(q.toInt())
         writeEscaped(value, q.toInt())
@@ -492,8 +489,7 @@ class KMPSerializerParser : KMPXmlSerializer {
 
         if (namespace == null && elementStack[depth * 3] != null
             || namespace != null && namespace != elementStack[depth * 3]
-            || elementStack[depth * 3 + 2] != name
-        )
+            || elementStack[depth * 3 + 2] != name)
             throw IllegalArgumentException("</{$namespace}$name> does not match start")
 
         if (pending) {
@@ -509,11 +505,11 @@ class KMPSerializerParser : KMPXmlSerializer {
             writer!!.write("</")
             val prefix = elementStack[depth * 3 + 1]
             if ("" != prefix) {
-                writer!!.write(prefix)
-                writer!!.write(':')
+                writer!!.write(prefix!!)
+                writer!!.write(":")
             }
             writer!!.write(name)
-            writer!!.write('>')
+            writer!!.write(">")
         }
 
         nspCounts[depth + 1] = nspCounts[depth]

@@ -189,7 +189,7 @@ interface KMPXmlSerializer {
      * will have values as defined
      * [Namespaces in XML specification](http://www.w3.org/TR/REC-xml-names/)
      */
-    fun getPrefix(namespace: String, generatePrefix: Boolean): String
+    fun getPrefix(namespace: String, generatePrefix: Boolean): String?
 
     /**
      * Writes a start tag with the given namespace and name.
