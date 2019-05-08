@@ -226,10 +226,10 @@ class KMPElement : KMPNode() {
     /**
      * Sets the given attribute; a value of null removes the attribute  */
 
-    fun setAttribute(namespace: String?, name: String, value: String?) {
+    fun setAttribute(namespace: String?, name: String?, value: String?) {
         var namespace = namespace
         if (attributes == null)
-            attributes = Vector()
+            attributes = mutableListOf()
 
         if (namespace == null)
             namespace = ""
@@ -239,7 +239,7 @@ class KMPElement : KMPNode() {
             if (attribut[0] == namespace && attribut[1] == name) {
 
                 if (value == null) {
-                    attributes!!.removeElementAt(i)
+                    attributes!!.removeAt(i)
                 } else {
                     attribut[2] = value
                 }
@@ -247,7 +247,7 @@ class KMPElement : KMPNode() {
             }
         }
 
-        attributes!!.addElement(arrayOf<String>(namespace, name, value))
+        attributes!!.add(arrayOf(namespace, name!!, value!!))
     }
 
 
@@ -255,9 +255,9 @@ class KMPElement : KMPNode() {
      * Sets the given prefix; a namespace value of null removess the
      * prefix  */
 
-    fun setPrefix(prefix: String, namespace: String) {
-        if (prefixes == null) prefixes = Vector()
-        prefixes!!.addElement(arrayOf(prefix, namespace))
+    fun setPrefix(prefix: String?, namespace: String?) {
+        if (prefixes == null) prefixes = mutableListOf()
+        prefixes!!.addAll(prefixes!!.size, listOf(arrayOf(prefix, namespace)))
     }
 
     /**

@@ -40,31 +40,31 @@ open class KMPNode { //implements XmlIO{
     /** inserts the given child object of the given type at the
      * given index.  */
 
-    fun addChild(index: Int, type: Int, child: Any?) {
+    open fun addChild(index: Int, type: Int, child: Any?) {
 
         if (child == null)
             throw NullPointerException()
 
         if (children == null) {
-            children = Vector()
-            types = StringBuffer()
+            children = mutableListOf()
+            types = StringBuilder()
         }
 
         if (type == ELEMENT) {
-            if (child !is Element)
+            if (child !is KMPElement)
                 throw RuntimeException("Element obj expected)")
 
-            (child as Element).setParent(this)
+            child.parent = this
         } else if (child !is String)
             throw RuntimeException("String expected")
 
-        children!!.insertElementAt(child, index)
-        types.insert(index, type.toChar())
+        children!!.add(index, child)
+        types.append(index, type.toChar())
     }
 
     /** convenience method for addChild (getChildCount (), child)  */
 
-    fun addChild(type: Int, child: Any) {
+    fun addChild(type: Int, child: Any?) {
         addChild(childCount, type, child)
     }
 
@@ -248,8 +248,8 @@ open class KMPNode { //implements XmlIO{
 
     /** Removes the child object at the given index  */
 
-    fun removeChild(idx: Int) {
-        children!!.removeElementAt(idx)
+    open fun removeChild(idx: Int) {
+        children!!.removeAt(idx)
 
         /***  Modification by HHS - start  */
 //      types.deleteCharAt (index);
@@ -257,9 +257,9 @@ open class KMPNode { //implements XmlIO{
         val n = types.length - 1
 
         for (i in idx until n)
-            types.setCharAt(i, types.get(i + 1))
+            types.append(i, types[i + 1])
 
-        types.setLength(n)
+       // types.setLength(n)
 
         /***  Modification by HHS - end    */
     }
