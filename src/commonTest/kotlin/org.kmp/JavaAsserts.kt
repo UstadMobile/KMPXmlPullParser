@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class JavaAsserts {
 
     companion object {
-        fun <T> javaAssertEquals(message: String, actual: T, expected: T) {
+        fun <T> javaAssertEquals(message: String, expected: T, actual: T) {
             assertEquals(expected, actual, message)
         }
 
