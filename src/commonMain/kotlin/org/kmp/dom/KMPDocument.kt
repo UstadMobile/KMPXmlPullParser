@@ -30,7 +30,7 @@ import org.kmp.io.KMPPullParser
  * element. This class basically adds some consistency checks to
  * KMPNode.  */
 
-class Document : KMPNode() {
+class KMPDocument : KMPNode() {
 
     private var rootIndex = -1
     /** returns "#document"  */
@@ -44,12 +44,12 @@ class Document : KMPNode() {
 
     /** returns the root element of this document.  */
 
-    val rootElement: Element
+    val rootElement: KMPElement
         get() {
             if (rootIndex == -1)
                 throw RuntimeException("Document has no root element!")
 
-            return getChild(rootIndex) as Element
+            return getChild(rootIndex) as KMPElement
         }
 
     /** Adds a child at the given index position. Throws
