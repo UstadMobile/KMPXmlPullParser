@@ -90,7 +90,7 @@ class KMPXmlParser : KMPPullParser {
 
     private var degenerated: Boolean = false
     private var attributeCount: Int = 0
-    private var attributes = arrayOfNulls<String>(16)
+    internal var attributes = arrayOfNulls<String>(16)
     //    private int stackMismatch = 0;
     private var error: String? = null
 
@@ -171,7 +171,7 @@ class KMPXmlParser : KMPPullParser {
             while (i >= 0) {
 
                 var attrName = attributes[i + 2]
-                val cut = attrName?.indexOf(':')?: -1
+                val cut = attrName?.indexOf(':') ?: -1
 
                 if (cut == 0 && !relaxed)
                     throw RuntimeException("illegal attribute name: $attrName at $this")
@@ -248,7 +248,8 @@ class KMPXmlParser : KMPPullParser {
 
     private fun exception(desc: String) {
         throw KMPPullParserException(
-            if (desc.length < 100) desc else desc.substring(0, 100) + "\n", this)
+            if (desc.length < 100) desc else desc.substring(0, 100) + "\n", this
+        )
     }
 
     /**
@@ -772,7 +773,7 @@ class KMPXmlParser : KMPPullParser {
             return
         }
 
-        val result = entityMap!!.get(code) as String
+        val result = entityMap[code] as String
 
         unresolved = result == null
 
