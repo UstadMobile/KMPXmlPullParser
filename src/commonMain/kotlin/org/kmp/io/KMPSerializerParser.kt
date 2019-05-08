@@ -91,7 +91,7 @@ class KMPSerializerParser : KMPXmlSerializer {
     private fun writeEscaped(s: String, quot: Int) {
 
         var i = 0
-        while (i < s.length) {
+        loop@ while (i < s.length) {
             val c = s[i]
             when (c) {
                 '\n', '\r', '\t' -> if (quot == -1)
@@ -106,7 +106,7 @@ class KMPSerializerParser : KMPXmlSerializer {
                         writer!!.write(
                             if (c == '"') "&quot;" else "&apos;"
                         )
-                        break
+                        break@loop
                     }
                     //if(c < ' ')
                     //	throw new IllegalArgumentException("Illegal control code:"+((int) c));
@@ -114,12 +114,12 @@ class KMPSerializerParser : KMPXmlSerializer {
                     if (i < s.length - 1) {
                         val cLow = s[i + 1]
                         // c is high surrogate and cLow is low surrogate
-                        if (c.toInt() >= 0xd800 && c.toInt() <= 0xdbff && cLow.toInt() >= 0xdc00 && cLow.toInt() <= 0xdfff) {
+                        if (c.toInt() in 0xd800..0xdbff && cLow.toInt() >= 0xdc00 && cLow.toInt() <= 0xdfff) {
                             // write surrogate pair as single code point
                             val n = (c.toInt() - 0xd800 shl 10) + (cLow.toInt() - 0xdc00) + 0x010000
                             writer!!.write("&#$n;")
                             i++ // Skip the low surrogate
-                            break
+                            break@loop
                         }
                         // Does nothing smart about orphan surrogates, just output them "as is"
                     }
@@ -132,11 +132,11 @@ class KMPSerializerParser : KMPXmlSerializer {
                 else -> {
                     if (i < s.length - 1) {
                         val cLow = s[i + 1]
-                        if (c.toInt() >= 0xd800 && c.toInt() <= 0xdbff && cLow.toInt() >= 0xdc00 && cLow.toInt() <= 0xdfff) {
+                        if (c.toInt() in 0xd800..0xdbff && cLow.toInt() >= 0xdc00 && cLow.toInt() <= 0xdfff) {
                             val n = (c.toInt() - 0xd800 shl 10) + (cLow.toInt() - 0xdc00) + 0x010000
                             writer!!.write("&#$n;")
                             i++
-                            break
+                            break@loop
                         }
                     }
                     if (c >= ' ' && c != '@' && (c.toInt() < 127 || unicode)) {
