@@ -83,8 +83,6 @@ class KMPElement : KMPNode() {
     val namespaceCount: Int
         get() = if (prefixes == null) 0 else prefixes!!.size
 
-    constructor() {}
-
     /**
      * called when all properties are set, but before children
      * are parsed. Please do not use setParent for initialization
@@ -114,7 +112,8 @@ class KMPElement : KMPNode() {
     }
 
     fun getAttributeNamespace(index: Int): String {
-        return attributes!!.elementAt(index)[0]
+        val list = attributes!!.elementAt(index) as List<*>
+        return list[0].toString()
     }
 
     /*	public String getAttributePrefix (int index) {
@@ -122,12 +121,14 @@ class KMPElement : KMPNode() {
 	}*/
 
     fun getAttributeName(index: Int): String {
-        return attributes!!.elementAt(index)[1]
+        var list = attributes!!.elementAt(index) as List<*>
+        return list[1].toString()
     }
 
 
     fun getAttributeValue(index: Int): String {
-        return attributes!!.elementAt(index)[2]
+        var list = attributes!!.elementAt(index) as List<*>
+        return list[2].toString()
     }
 
 
@@ -157,16 +158,18 @@ class KMPElement : KMPNode() {
             if (prefix === getNamespacePrefix(i) || prefix != null && prefix == getNamespacePrefix(i))
                 return getNamespaceUri(i)
         }
-        return if (parent is Element) (parent as Element).getNamespaceUri(prefix) else null
+        return if (parent is KMPElement) (parent as KMPElement).getNamespaceUri(prefix) else null
     }
 
 
     fun getNamespacePrefix(i: Int): String {
-        return prefixes!!.elementAt(i)[0]
+        var list = prefixes!!.elementAt(i) as List<*>
+        return list[0].toString()
     }
 
     fun getNamespaceUri(i: Int): String {
-        return prefixes!!.elementAt(i)[1]
+        var list = attributes!!.elementAt(i) as List<*>
+        return list[1].toString()
     }
 
     /*
@@ -186,18 +189,13 @@ class KMPElement : KMPNode() {
 
     override fun parse(parser: KMPXmlParser) {
 
-        for (i in parser.getNamespaceCount(parser.depth - 1) until parser.getNamespaceCount(parser.depth)) {
+        for (i in parser.getNamespaceCount(parser.getDepth() - 1) until parser.getNamespaceCount(parser.getDepth())) {
             setPrefix(parser.getNamespacePrefix(i), parser.getNamespaceUri(i))
         }
 
 
-        for (i in 0 until parser.attributeCount)
-            setAttribute(
-                parser.getAttributeNamespace(i),
-                //	        			  parser.getAttributePrefix (i),
-                parser.getAttributeName(i),
-                parser.getAttributeValue(i)
-            )
+        for (i in 0 until parser.getAttributeCount())
+            setAttribute(parser.getAttributeNamespace(i), parser.getAttributeName(i), parser.getAttributeValue(i))
 
 
         //        if (prefixMap == null) throw new RuntimeException ("!!");

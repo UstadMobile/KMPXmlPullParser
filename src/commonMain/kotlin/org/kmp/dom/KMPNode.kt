@@ -76,10 +76,10 @@ open class KMPNode { //implements XmlIO{
      * legal value. Currently, null is converted to Xml.NO_NAMESPACE,
      * but future versions may throw an exception.  */
 
-    fun createElement(namespace: String?, name: String): Element {
+    open fun createElement(namespace: String?, name: String): KMPElement {
 
-        val e = Element()
-        e.namespace = namespace ?: ""
+        val e = KMPElement()
+        e.namespace = namespace ?: KMPPullParser.NO_NAMESPACE
         e.name = name
         return e
     }
