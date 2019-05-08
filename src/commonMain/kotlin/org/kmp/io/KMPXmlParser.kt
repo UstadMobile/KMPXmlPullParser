@@ -218,7 +218,7 @@ class KMPXmlParser : KMPPullParser {
             name = name!!.substring(cut + 1)
         }
 
-        this.namespace = getNamespace(prefix!!)
+        this.namespace = getNamespace(prefix)
 
         if (this.namespace == null) {
             if (prefix != null)

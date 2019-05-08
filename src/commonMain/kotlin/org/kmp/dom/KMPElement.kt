@@ -20,27 +20,26 @@
 
 package org.kmp.dom
 
-import java.io.*
-import java.util.*
-
-import org.xmlpull.v1.*
+import org.kmp.io.KMPPullParser
+import org.kmp.io.KMPSerializerParser
+import org.kmp.io.KMPXmlParser
 
 /**
  * In order to create an element, please use the createElement method
  * instead of invoking the constructor directly. The right place to
  * add user defined initialization code is the init method.  */
 
-class KMPElement : Node() {
+class KMPElement : KMPNode() {
 
-    protected var namespace: String
+    internal lateinit var namespace: String
     /**
      * returns the (local) name of the element  */
 
     /**
      * sets the name of the element  */
 
-    var name: String
-    protected var attributes: Vector<*>? = null
+    lateinit var name: String
+    protected var attributes: MutableList<Any>? = null
     /**
      * Returns the parent node of this element  */
 
@@ -49,10 +48,9 @@ class KMPElement : Node() {
      * add method.  Please use with care, you can simply
      * create inconsitencies in the document tree structure using
      * this method!   */
-
-    var parent: Node? = null
-        protected set
-    protected var prefixes: Vector<*>? = null
+    var parent: KMPNode? = null
+        internal set
+    protected var prefixes: MutableList<Any>? = null
 
     /**
      * Returns the number of attributes of this element.  */
@@ -64,14 +62,14 @@ class KMPElement : Node() {
      * Returns the root node, determined by ascending to the
      * all parents un of the root element.  */
 
-    val root: Node
+    val root: KMPNode
         get() {
 
-            var current: Element = this
+            var current: KMPElement = this
 
             while (current.parent != null) {
-                if (current.parent !is Element) return current.parent
-                current = current.parent as Element
+                if (current.parent !is KMPElement) return current.parent!!
+                current = current.parent as KMPElement
             }
 
             return current
@@ -107,10 +105,7 @@ class KMPElement : Node() {
      * Forwards creation request to parent if any, otherwise
      * calls super.createElement.  */
 
-    override fun createElement(
-        namespace: String?,
-        name: String
-    ): Element {
+    override fun createElement(namespace: String?, name: String): KMPElement {
 
         return if (this.parent == null)
             super.createElement(namespace, name)
@@ -189,8 +184,7 @@ class KMPElement : Node() {
      * parse, an element can take complete control over parsing its
      * subtree.  */
 
-    @Throws(IOException::class, XmlPullParserException::class)
-    override fun parse(parser: XmlPullParser) {
+    override fun parse(parser: KMPXmlParser) {
 
         for (i in parser.getNamespaceCount(parser.depth - 1) until parser.getNamespaceCount(parser.depth)) {
             setPrefix(parser.getNamespacePrefix(i), parser.getNamespaceUri(i))
@@ -211,18 +205,18 @@ class KMPElement : Node() {
         init()
 
 
-        if (parser.isEmptyElementTag)
+        if (parser.isEmptyElementTag())
             parser.nextToken()
         else {
             parser.nextToken()
             super.parse(parser)
 
             if (childCount == 0)
-                addChild(Node.IGNORABLE_WHITESPACE, "")
+                addChild(IGNORABLE_WHITESPACE, "")
         }
 
         parser.require(
-            XmlPullParser.END_TAG,
+            KMPPullParser.END_TAG,
             getNamespace(),
             name
         )
@@ -284,8 +278,7 @@ class KMPElement : Node() {
     /**
      * Writes this element and all children to the given XmlWriter.  */
 
-    @Throws(IOException::class)
-    fun write(writer: XmlSerializer) {
+    override fun write(writer: KMPSerializerParser) {
 
         if (prefixes != null) {
             for (i in prefixes!!.indices) {

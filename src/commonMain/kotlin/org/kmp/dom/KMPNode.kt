@@ -20,20 +20,17 @@
 
 package org.kmp.dom
 
-import java.util.*
-import java.io.*
-
-import org.kmp.io.XmlPullParserException
-import org.kmp.io.XmlSerializer
-import org.xmlpull.v1.*
+import org.kmp.io.KMPPullParser
+import org.kmp.io.KMPSerializerParser
+import org.kmp.io.KMPXmlParser
 
 /** A common base class for Document and Element, also used for
  * storing XML fragments.  */
 
-class Node { //implements XmlIO{
+open class KMPNode { //implements XmlIO{
 
-    protected var children: Vector<*>? = null
-    protected var types: StringBuffer
+    internal var children: MutableList<Any>? = null
+    protected var types: StringBuilder = StringBuilder()
 
     /** Returns the number of child objects  */
 
@@ -98,16 +95,16 @@ class Node { //implements XmlIO{
     /** returns the element at the given index. If the node at the
      * given index is a text node, null is returned  */
 
-    fun getElement(index: Int): Element? {
+    fun getElement(index: Int): KMPElement? {
         val child = getChild(index)
-        return if (child is Element) child as Element else null
+        return if (child is KMPElement) child as KMPElement else null
     }
 
     /** Returns the element with the given namespace and name. If the
      * element is not found, or more than one matching elements are
      * found, an exception is thrown.  */
 
-    fun getElement(namespace: String, name: String): Element? {
+    fun getElement(namespace: String, name: String): KMPElement? {
 
         val i = indexOf(namespace, name, 0)
         val j = indexOf(namespace, name, i + 1)
@@ -197,10 +194,8 @@ class Node { //implements XmlIO{
 
             val child = getElement(i)
 
-            if ((child != null
-                        && name == child!!.getName()
-                        && (namespace == null || namespace == child!!.getNamespace()))
-            )
+            if ((child != null && name == child.name
+                        && (namespace == null || namespace == child.getNamespace())))
                 return i
         }
         return -1
@@ -215,23 +210,19 @@ class Node { //implements XmlIO{
      * until an end tag or end document is found.
      * The end tag is not consumed.  */
 
-    @Throws(IOException::class, XmlPullParserException::class)
-    fun parse(parser: XmlPullParser) {
+    open fun parse(parser: KMPXmlParser) {
 
         var leave = false
 
         do {
-            val type = parser.eventType
+            val type = parser.getEventType()
 
 //         System.out.println(parser.getPositionDescription());
 
             when (type) {
 
-                XmlPullParser.START_TAG -> {
-                    val child = createElement(
-                        parser.namespace,
-                        parser.name
-                    )
+                KMPPullParser.START_TAG -> {
+                    val child = createElement(parser.getNamespace(), parser.getName()!!)
 //    child.setAttributes (event.getAttributes ());
                     addChild(ELEMENT, child)
 
@@ -241,16 +232,13 @@ class Node { //implements XmlIO{
                     child.parse(parser)
                 }
 
-                XmlPullParser.END_DOCUMENT, XmlPullParser.END_TAG -> leave = true
+                KMPPullParser.END_DOCUMENT, KMPPullParser.END_TAG -> leave = true
 
                 else -> {
-                    if (parser.text != null)
-                        addChild(
-                            if (type == XmlPullParser.ENTITY_REF) TEXT else type,
-                            parser.text
-                        )
-                    else if ((type == XmlPullParser.ENTITY_REF && parser.name != null)) {
-                        addChild(ENTITY_REF, parser.name)
+                    if (parser.getText() != null)
+                        addChild(if (type == KMPPullParser.ENTITY_REF) TEXT else type, parser.getText())
+                    else if ((type == KMPPullParser.ENTITY_REF && parser.getName() != null)) {
+                        addChild(ENTITY_REF, parser.getName())
                     }
                     parser.nextToken()
                 }
@@ -298,16 +286,14 @@ throw new RuntimeException(e.toString());
      * this method is identical to writeChildren, except that the
      * stream is flushed automatically.  */
 
-    @Throws(IOException::class)
-    fun write(writer: XmlSerializer) {
+    open fun write(writer: KMPSerializerParser) {
         writeChildren(writer)
         writer.flush()
     }
 
     /** Writes the children of this node to the given XmlWriter.  */
 
-    @Throws(IOException::class)
-    fun writeChildren(writer: XmlSerializer) {
+    fun writeChildren(writer: KMPSerializerParser) {
         if (children == null)
             return
 
@@ -317,7 +303,7 @@ throw new RuntimeException(e.toString());
             val type = getType(i)
             val child = children!!.elementAt(i)
             when (type) {
-                ELEMENT -> (child as Element).write(writer)
+                ELEMENT -> (child as KMPElement).write(writer)
 
                 TEXT -> writer.text(child as String)
 
