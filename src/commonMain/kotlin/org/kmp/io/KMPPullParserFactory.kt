@@ -40,7 +40,7 @@ abstract class KMPPullParserFactory
 protected constructor() {
 
     // features are kept there
-    protected var features = Hashtable()
+    protected var features = mutableMapOf<Any, Any>()
 
     /**
      * Indicates whether or not the factory is configured to produce
@@ -81,7 +81,7 @@ protected constructor() {
      */
     var isValidating: Boolean
         get() {
-            return features[KMPPullParser.FEATURE_VALIDATION]?: false
+            return features[KMPPullParser.FEATURE_VALIDATION] as Boolean? ?: false
         }
         set(validating) {
             features[KMPPullParser.FEATURE_VALIDATION] = validating
@@ -105,7 +105,7 @@ protected constructor() {
      * Unknown features are <string>always returned as false
     </string> */
     fun getFeature(name: String): Boolean {
-        return features[name]?: false
+        return features[name] as Boolean? ?: false
     }
 
     /**
