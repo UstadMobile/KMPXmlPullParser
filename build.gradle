@@ -7,7 +7,8 @@ repositories {
     jcenter()
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }
-group 'org.kmp'
+
+group 'com.ustadmobile.kmpxmlpullparser'
 version '0.0.1'
 
 apply plugin: 'maven-publish'
@@ -65,5 +66,28 @@ kotlin {
             }
         }
 
+    }
+}
+
+ext.localProperties = new Properties()
+if(project.file("local.properties").exists()) {
+    ext.localProperties.load(new FileInputStream(project.file("local.properties")))
+}else {
+    ext.localProperties["repo.dir"] = "../kmpxmlpullparserrepo"
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = "kmpxmlpullparser"
+            version = version
+        }
+    }
+    repositories {
+        maven {
+            url localProperties['repo.dir']
+        }
     }
 }
