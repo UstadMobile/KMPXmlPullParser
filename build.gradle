@@ -9,7 +9,7 @@ repositories {
 }
 
 group 'com.ustadmobile.kmpxmlpullparser'
-version '0.0.1'
+version '0.0.2'
 
 apply plugin: 'maven-publish'
 

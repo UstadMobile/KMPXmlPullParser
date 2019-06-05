@@ -13,7 +13,8 @@ pluginManagement {
         }
     }
 }
-rootProject.name = 'KMPXmlPullParser'
+rootProject.name = 'kmpxmlpullparser'
 
 
-enableFeaturePreview('GRADLE_METADATA')
+// Using enableFeaturePreview('GRADLE_METADATA') breaks builds where this library is consumed with Gradle 5.4+
+//enableFeaturePreview('GRADLE_METADATA')
